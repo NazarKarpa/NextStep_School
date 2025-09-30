@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class NextstepAppConfig(AppConfig):
+class HomeAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'nextstep_app'
+    name = 'home_app'

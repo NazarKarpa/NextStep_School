@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'auth_system',
     'course_and_module_app',
     'lessons_app',
-    'nextstep_app',
+    'home_app',
 ]
 
 MIDDLEWARE = [
