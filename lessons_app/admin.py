@@ -3,5 +3,6 @@ from lessons_app import models
 
 admin.site.register(models.Material)
 admin.site.register(models.Lesson)
+admin.site.register(models.LessonSchedule)
 
 
