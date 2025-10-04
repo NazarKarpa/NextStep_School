@@ -31,7 +31,7 @@ class TestTask(models.Model):
 
 class Option(models.Model):
     name = models.CharField(max_length=100, verbose_name='Варіант')
-    option = models.ForeignKey(TestTask, on_delete=CASCADE, related_name='answers', verbose_name='Вибір варіанту')
+    option = models.ForeignKey(TestTask, on_delete=CASCADE, related_name='answers', verbose_name='Завдання')
 
     def __str__(self):
         return f'Name" -{self.name},'

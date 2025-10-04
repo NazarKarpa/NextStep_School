@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'course_and_module_app',
     'lessons_app',
     'home_app',
+    'tasksmarks_app',
 ]
 
 MIDDLEWARE = [
