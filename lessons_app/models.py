@@ -15,3 +15,7 @@ class Lesson(models.Model):
     def __str__(self):
         return f'Lesson_name - {self.name}, modul - {self.modul}'
 
+
+class LessonSchedule(models.Model):
+    start_lessons = models.DateTimeField(blank=True, null=True)
+    lesson = models.ForeignKey(Lesson, blank=True, on_delete=CASCADE, related_name='lesson')
