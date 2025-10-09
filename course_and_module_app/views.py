@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, View, UpdateV
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 
-from course_and_module_app.models import Course, Module
+from course_and_module_app.models import Course, Module, ModuleSchedule
 
 
 class CourseList(LoginRequiredMixin, ListView):
@@ -12,9 +12,17 @@ class CourseList(LoginRequiredMixin, ListView):
     context_object_name = 'courses'
     template_name = 'course_and_module/course_list.html'
 
+    def get_queryset(self):
+        queryset = Course.objects.filter(students = self.request.user).all()
+
+        return queryset
 
 class ModuleList(LoginRequiredMixin, ListView):
     model = Module
     context_object_name = 'moduls'
     template_name = 'course_and_module/module_list.html'
 
+    # def get_queryset(self):
+    #     queryset = ModuleSchedule.objects.filter().all()
+    #
+    #     return queryset
