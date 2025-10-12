@@ -15,7 +15,7 @@ class Course(models.Model):
 
 class Module(models.Model):
     name = models.CharField(max_length=150)
-    course = models.ForeignKey(Course, blank=True, null=True,  on_delete=CASCADE, related_name='course')
+    course = models.ForeignKey(Course, blank=True, null=True,  on_delete=CASCADE, related_name='course_modules')
 
     def __str__(self):
         return f'Module_name - {self.name}'

@@ -25,6 +25,6 @@ urlpatterns = [
     path('', include('auth_system.urls')),
     # path('', include('home_app.urls')),
     path('', include('course_and_module_app.urls')),
-    # path('', include('lessons_app.urls')),
+    path('lesson/', include('lessons_app.urls')),
     # path('', include('tasksmarks_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

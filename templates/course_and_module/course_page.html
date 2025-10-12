@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul>
+    {% for module in course.course_modules.all %}
+        <li>
+            <a href="{% url 'lessons_app:lessons-list' %}">{{ module.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+
+
+{% endblock %}

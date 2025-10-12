@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from course_and_module_app.models import Course, Module, ModuleSchedule
 
 
-class CourseList(LoginRequiredMixin, ListView):
+class CourseListView(LoginRequiredMixin, ListView):
     model = Course
     context_object_name = 'courses'
     template_name = 'course_and_module/course_list.html'
@@ -17,10 +17,10 @@ class CourseList(LoginRequiredMixin, ListView):
 
         return queryset
 
-class ModuleList(LoginRequiredMixin, ListView):
-    model = Module
-    context_object_name = 'moduls'
-    template_name = 'course_and_module/module_list.html'
+class CourseDetailView(LoginRequiredMixin, DetailView):
+    model = Course
+    context_object_name = 'course'
+    template_name = 'course_and_module/course_page.html'
 
     # def get_queryset(self):
     #     queryset = ModuleSchedule.objects.filter().all()
