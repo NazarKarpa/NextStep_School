@@ -5,7 +5,7 @@ from django.db.models import CASCADE
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses_as_students')
     teacher = models.ForeignKey(User, blank=True, on_delete=CASCADE, related_name='courses_as_teacher')
 

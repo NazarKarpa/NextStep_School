@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+    {% for course in courses %}
+        <li>
+            <a href="{% url 'module-list' course.pk %}">{{ course.title }}</a>
+        </li>
+    {% endfor %}
+</ul>
 
-</body>
-</html>
+
+{% endblock %}
