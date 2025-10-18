@@ -2,10 +2,12 @@
 {% block content %}
 <ul>
     {% for lesson in lessons %}
+
         <li>
             <a href="{% url 'lessons_app:lesson-detail' lesson.pk %}">{{ lesson.name }}</a>
         </li>
     {% endfor %}
+
 </ul>
 
 

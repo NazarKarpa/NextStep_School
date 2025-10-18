@@ -25,6 +25,16 @@ class LessonsDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         queryset = Lesson.objects.all()
-
         return queryset
+
+
+class MaterialDetail(LoginRequiredMixin, DetailView):
+    module = Material
+    context_object_name = 'material'
+    template_name = 'lessons/material_detail.html'
+
+    def get_queryset(self):
+        queryset = Material.objects.all()
+        return queryset
+
 
