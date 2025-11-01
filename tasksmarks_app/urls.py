@@ -2,8 +2,7 @@ from django.urls import path
 from tasksmarks_app import views
 
 urlpatterns = [
-    path('', views.MainTaskView.as_view(), name='task_dashboard'),
-    path('<int:pk>/', views.MainTaskView.as_view(), name='task_detail'),
+    path('lessons/<int:pk>/tasks', views.LessonTaskView.as_view(), name='task_detail'),
 
 ]
 
