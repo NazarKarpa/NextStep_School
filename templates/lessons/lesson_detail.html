@@ -7,6 +7,11 @@
                 <a href="{% url 'lessons_app:material-detail' material.pk %}">Матеріал</a>
             </li>
             {% endfor %}
+            {% for task in lesson.task_in_lesson.all %}
+            <li>
+                <a href="#">task.name</a>
+            </li>
+            {% endfor %}
 </ul>
 
 
