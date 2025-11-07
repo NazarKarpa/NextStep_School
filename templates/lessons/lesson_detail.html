@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <ul>
             <h1>{{ lesson.name }}</h1>
+
             {% for material in lesson.material.all %}
             <li>
                 <a href="{% url 'lessons_app:material-detail' material.pk %}">Матеріал</a>
             </li>
             {% endfor %}
-            {% for task in lesson.task_in_lesson.all %}
+            {% for task in lesson.tasks.all %}
             <li>
-                <a href="#">task.name</a>
+                <a href="{% url 'task_app:task-list' lesson.pk %}">task.name</a>
             </li>
             {% endfor %}
 </ul>
