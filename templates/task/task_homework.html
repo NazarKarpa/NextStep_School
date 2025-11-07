@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 <ul>
+    <form action="{% url 'task_app:task-list' lesson.id|default:1 task.id|default:1 %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ task_form.as_p }}
+      <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
+    </form>
     {% for task in tasks %}
         <li>
             <a href="#">{{ task.name }}</a>
-        </li>
-        <li>
-            <p>{{ task_detail.name }}</p>
-            <p>{{ task_detail.description }}</p>
         </li>
 
     {% endfor %}

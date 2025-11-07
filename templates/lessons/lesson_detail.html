@@ -9,11 +9,10 @@
                 <a href="{% url 'lessons_app:material-detail' material.pk %}">Матеріал</a>
             </li>
             {% endfor %}
-            {% for task in lesson.tasks.all %}
             <li>
-                <a href="{% url 'task_app:task-list' lesson.pk %}">task.name</a>
+                <a href="{% url 'task_app:task-list' lesson.pk task.id|default:1 %}">Homework</a>
             </li>
-            {% endfor %}
+
 </ul>
 
 
