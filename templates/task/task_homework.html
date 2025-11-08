@@ -5,7 +5,7 @@
 <ul>
     {% for task in tasks %}
         <li>
-            <a href="{% url 'task_app:task-list' lesson.pk task.id|default:1 %}">{{ task.name }}</a>
+            <a href="{% url 'task_app:task-list' lesson.pk|default:1 task.id|default:1 %}">{{ task.name }}</a>
         </li>
 
     {% endfor %}

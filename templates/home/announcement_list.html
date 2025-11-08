@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul>
+<div class='room-list'>
+    {% for announcement in announcements %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ announcement.image.url }}" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title"> {{ announcement.title }}</h5>
+                <p class="card-text">description: {{ announcement.content }}</p>
+
+
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+</ul>
+
+{% endblock %}
