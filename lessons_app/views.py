@@ -28,6 +28,7 @@ class LessonsDetailView(LoginRequiredMixin, DetailView):
         return queryset
 
 
+
 class MaterialDetail(LoginRequiredMixin, DetailView):
     module = Material
     context_object_name = 'material'
