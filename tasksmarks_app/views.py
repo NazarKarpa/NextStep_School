@@ -15,7 +15,9 @@ class LessonTaskView(TaskListMixin, TaskDetailMixins, LoginRequiredMixin, Templa
 
     def get_lesson_context(self):
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
+
         context = {}
+        context['lesson'] = lesson
         context.update(self.get_task_list_context(lesson))
         context.update(self.get_task_detail_context(task_id=self.kwargs.get('task_id')))
 
