@@ -10,24 +10,38 @@ from lessons_app.models import Lesson
 from tasksmarks_app.forms import *
 from django.shortcuts import get_object_or_404
 
-class LessonTaskView(TaskListMixin, TaskDetailMixins, LoginRequiredMixin, TemplateView):
-    template_name = 'task/task_homework.html'
+class LessonTaskListView(ListView):
+    model = Task
+    context_object_name = 'tasks'
+    template_name = 'task/task_list.html'
 
-    def get_lesson_context(self):
+    def get_queryset(self):
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
-
-        context = {}
-        context['lesson'] = lesson
-        context.update(self.get_task_list_context(lesson))
-        context.update(self.get_task_detail_context(task_id=self.kwargs.get('task_id')))
-
-        return context
+        return lesson.tasks.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['task_form'] = TaskForm()
-        context.update(self.get_lesson_context())
+        lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
+        context['lesson'] = lesson
+        context['tasks'] = context['lesson'].tasks.all()
         return context
+
+
+
+# class TaskDetailView(DetailView):
+#     model = Task
+#     context_object_name = 'task'
+#     template_name = 'task/task_homework.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
+#         context['lesson'] = lesson
+#         context['tasks'] = context['lesson'].tasks.all()
+#         return context
+
+
+
 
 
 

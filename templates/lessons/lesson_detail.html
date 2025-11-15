@@ -10,7 +10,7 @@
             </li>
             {% endfor %}
             <li>
-                <a href="{% url 'task_app:task-list' lesson.pk task.id|default:1 %}">Homework</a>
+                <a href="{% url 'task_app:task-list' lesson.pk %}">Homework</a>
             </li>
 
 </ul>

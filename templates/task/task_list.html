@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    {% for task in tasks %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link {%if forloop.counter == 1 %}active{% endif %}" id="task-tab-{{ task.id }}" data-bs-toggle="tab" data-bs-target="#task-tab-pane-{{ task.id }}" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">{{forloop.counter}}</button>
+      </li>
+    {% endfor %}
+</ul>
+<div class="tab-content" id="myTabContent">
+    {% for task in tasks %}
+        <div class="tab-pane fade {%if forloop.counter == 1 %} show active{% endif %}" id="task-tab-pane-{{ task.id }}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            {{task.description}}</div>
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock %}

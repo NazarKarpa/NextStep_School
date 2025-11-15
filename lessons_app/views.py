@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, View, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-
+from tasksmarks_app.mixins import *
 from lessons_app.models import Lesson, LessonSchedule, Material
 
 
@@ -18,7 +18,7 @@ class LessonsListView(LoginRequiredMixin, ListView):
         return queryset
 
 
-class LessonsDetailView(LoginRequiredMixin, DetailView):
+class LessonsDetailView(LoginRequiredMixin, DetailView, TaskDetailMixins):
     module = Lesson
     context_object_name = 'lesson'
     template_name = 'lessons/lesson_detail.html'
