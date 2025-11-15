@@ -3,20 +3,15 @@
 {% block content %}
 
 <ul>
-    {% for task in tasks %}
 
         <li>
             <a href="{% url 'task_app:task-list' lesson.pk task.id %}">{{ task.name }}</a>
         </li>
 
-    {% endfor %}
-    <p>Деталлі: {{ task_detail.description }}</p>
 
-         <form action="{% url 'task_app:task-list' lesson.pk task.id|default:1 %}" method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          {{ task_form.as_p }}
-          <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
-        </form>
+    <p>Деталлі: {{ task.description }}</p>
+
+
 </ul>
 
 
