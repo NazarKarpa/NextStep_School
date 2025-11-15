@@ -28,17 +28,17 @@ class LessonTaskListView(ListView):
 
 
 
-class TaskDetailView(DetailView):
-    model = Task
-    context_object_name = 'task'
-    template_name = 'task/task_homework.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
-        context['lesson'] = lesson
-        context['tasks'] = context['lesson'].tasks.all()
-        return context
+# class TaskDetailView(DetailView):
+#     model = Task
+#     context_object_name = 'task'
+#     template_name = 'task/task_homework.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
+#         context['lesson'] = lesson
+#         context['tasks'] = context['lesson'].tasks.all()
+#         return context
 
 
 

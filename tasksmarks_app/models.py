@@ -14,7 +14,7 @@ class Task(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
-    user_answer = models.TextField(blank=True, null=True)
+
 
     def __str__(self):
         return f'Name - {self.name}, status - {self.status}'
@@ -49,7 +49,8 @@ class ChoiceTest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Зробленно в ')
 
 
-class ChoiceTask(models.Model):
+class AnswerTask(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_task', verbose_name='Вибір студента')
     choice = models.ForeignKey(Task, on_delete=CASCADE, related_name='choice_task', verbose_name='Збереження завдання')
+    answer = models.TextField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Зробленно в ')
