@@ -1,12 +1,12 @@
 from django import forms
 from tasksmarks_app.models import *
 
-class TaskForm(forms.ModelForm):
+class AnswerTaskForm(forms.ModelForm):
     class Meta:
-        model = Task
-        fields = ['user_answer']
+        model = AnswerTask
+        fields = ['answer']
 
-    user_answer = forms.CharField(
+    answer = forms.CharField(
         widget=forms.Textarea(attrs={
             'class': 'form-control',
             'rows': 6,
@@ -18,6 +18,6 @@ class TaskForm(forms.ModelForm):
         max_length=2000
     )
     def __init__(self, *args, **kwargs):
-        super(TaskForm, self).__init__(*args, **kwargs)
+        super(AnswerTaskForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})

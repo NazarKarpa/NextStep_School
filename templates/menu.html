@@ -13,8 +13,12 @@
 
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav me-auto mb-10 mb-lg-0">
+
                 <li class="nav-item">
                     <a class="nav-link active" href="/">Головна</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'course_and_module_app:course-list' %}">My Course</a>
                 </li>
 
                 {% if user.is_authenticated %}

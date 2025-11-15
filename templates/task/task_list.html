@@ -15,7 +15,11 @@
     {% endfor %}
 </div>
 
-
+<form action="{% url 'task_app:task-list' lesson.pk %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ answer_task_form.as_p }}
+      <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
+    </form>
 
 
 {% endblock %}
