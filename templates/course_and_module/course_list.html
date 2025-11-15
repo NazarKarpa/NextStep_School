@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul>
+    {% for course in courses %}
+        <li>
+            <a href="{% url 'course_and_module_app:course-detail' course.pk %}">{{ course.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+
+{% endblock %}

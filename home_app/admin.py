@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from home_app.models import Announcement
+
+admin.site.register(Announcement)

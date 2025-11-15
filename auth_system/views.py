@@ -9,14 +9,14 @@ def register_page(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('tasks:task-list')
+            return redirect('course_and_module_app:course-list')
 
 
     context = {
         'form': form
     }
 
-    return render(request, template_name = 'tasks/register.html', context=context)
+    return render(request, template_name = 'auth_system/register.html', context=context)
 
 
 def login_page(request):
@@ -26,13 +26,13 @@ def login_page(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('tasks:task-list')
+            return redirect('course_and_module_app:course-list')
 
     context = {
         'form': form
     }
 
-    return render(request, template_name='tasks/login.html', context=context)
+    return render(request, template_name='auth_system/login.html', context=context)
 
 def logout_page(request):
     if request.user.is_authenticated:
