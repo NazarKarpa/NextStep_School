@@ -29,16 +29,20 @@ class LessonTaskListView(ListView):
 
 
     def post(self, request, *args, **kwargs):
+        task_id = request.POST.get('task_id')
         answer_task_form = AnswerTaskForm(request.POST)
+
         if answer_task_form.is_valid():
+            task = get_object_or_404(Task, pk=task_id)
             answer_task = answer_task_form.save(commit=False)
             answer_task.student = request.user
-            answer_task.choice = self.get_object()
+            answer_task.choice = task
             answer_task.save()
-            return redirect('task_app:task-list')
+            return redirect('task_app:task-list', pk=kwargs['pk'])
 
         else:
             pass
+
 
 
 

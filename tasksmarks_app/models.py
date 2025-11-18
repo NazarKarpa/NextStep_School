@@ -54,3 +54,6 @@ class AnswerTask(models.Model):
     choice = models.ForeignKey(Task, on_delete=CASCADE, related_name='choice_task', verbose_name='Збереження завдання')
     answer = models.TextField(blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Зробленно в ')
+
+    def __str__(self):
+        return f'student - {self.student}, Task - {self.choice}, answer - {self.answer}'

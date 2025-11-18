@@ -11,15 +11,20 @@
 <div class="tab-content" id="myTabContent">
     {% for task in tasks %}
         <div class="tab-pane fade {%if forloop.counter == 1 %} show active{% endif %}" id="task-tab-pane-{{ task.id }}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-            {{task.description}}</div>
+            {{task.description}}
+
+        <form action="{% url 'task_app:task-list' lesson.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="task_id" value="{{task.id}}">
+            {{ answer_task_form.as_p }}
+            <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
+        </form>
+        </div>
+
     {% endfor %}
 </div>
 
-<form action="{% url 'task_app:task-list' lesson.pk %}" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ answer_task_form.as_p }}
-      <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
-    </form>
+
 
 
 {% endblock %}
