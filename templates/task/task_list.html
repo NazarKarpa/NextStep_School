@@ -6,7 +6,21 @@
       <li class="nav-item" role="presentation">
         <button class="nav-link {%if forloop.counter == 1 %}active{% endif %}" id="task-tab-{{ task.id }}" data-bs-toggle="tab" data-bs-target="#task-tab-pane-{{ task.id }}" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">{{forloop.counter}}</button>
       </li>
+
     {% endfor %}
+
+    {% for test in test_task %}
+      <li class="nav-item" role="presentation">
+        <button class="nav-link "
+                id="test_task-tab-{{ test.id }}"
+                data-bs-toggle="tab"
+                data-bs-target="#testtask-tab-pane-{{ test.id }}"
+                type="button" role="tab">
+            {{ forloop.counter }}
+        </button>
+      </li>
+    {% endfor %}
+
 </ul>
 <div class="tab-content" id="myTabContent">
     {% for task in tasks %}
@@ -22,6 +36,21 @@
         </div>
 
     {% endfor %}
+
+    {% for test in test_task %}
+        {% for option in test.answers.all %}
+
+            <div class="list-group">
+              <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                The current link item
+              </a>
+              <a href="#" class="list-group-item list-group-item-action">{{option.name}}</a>
+            </div>
+
+        {% endfor %}
+    {% endfor %}
+
+
 </div>
 
 

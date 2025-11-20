@@ -10,7 +10,7 @@ from lessons_app.models import Lesson
 from tasksmarks_app.forms import *
 from django.shortcuts import get_object_or_404
 
-class LessonTaskListView(ListView):
+class LessonTaskListView(ListView, LoginRequiredMixin):
     model = Task
     context_object_name = 'tasks'
     template_name = 'task/task_list.html'
@@ -22,8 +22,10 @@ class LessonTaskListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
+
         context['lesson'] = lesson
         context['tasks'] = context['lesson'].tasks.all()
+        context['test_task'] = context['lesson'].tasks_test.all()
         context['answer_task_form'] = AnswerTaskForm()
         return context
 
@@ -42,9 +44,6 @@ class LessonTaskListView(ListView):
 
         else:
             pass
-
-
-
 
 
 

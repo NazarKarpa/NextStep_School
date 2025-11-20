@@ -13,6 +13,7 @@ class Lesson(models.Model):
     modul = models.ForeignKey(module.Module, on_delete=CASCADE, related_name='Lessons')
     material = models.ManyToManyField(Material, blank=True, related_name = 'material_in_lesson')
     tasks = models.ManyToManyField(task.Task, blank=True, related_name='task_in_lesson')
+    tasks_test = models.ManyToManyField(task.TestTask, blank=True, related_name='test_task_in_lesson')
 
     def __str__(self):
         return f'Lesson_name - {self.name}, modul - {self.modul}'
