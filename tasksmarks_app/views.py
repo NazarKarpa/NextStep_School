@@ -22,28 +22,44 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
-
+        test_tast = get_object_or_404(TestTask, pk=self.kwargs.get('pk'))
         context['lesson'] = lesson
         context['tasks'] = context['lesson'].tasks.all()
         context['test_task'] = context['lesson'].tasks_test.all()
         context['answer_task_form'] = AnswerTaskForm()
+        answer = ChoiceTest.objects.filter(choice=test_tast, student=self.request.user).first()
+        if answer:
+            context['user_answer'] = answer
         return context
 
 
     def post(self, request, *args, **kwargs):
         task_id = request.POST.get('task_id')
-        answer_task_form = AnswerTaskForm(request.POST)
+        test_question_id  = request.POST.get('test_question_id')
+        if task_id:
+            answer_task_form = AnswerTaskForm(request.POST)
 
-        if answer_task_form.is_valid():
-            task = get_object_or_404(Task, pk=task_id)
-            answer_task = answer_task_form.save(commit=False)
-            answer_task.student = request.user
-            answer_task.choice = task
-            answer_task.save()
-            return redirect('task_app:task-list', pk=kwargs['pk'])
+            if answer_task_form.is_valid():
+                task = get_object_or_404(Task, pk=task_id)
+                answer_task = answer_task_form.save(commit=False)
+                answer_task.student = request.user
+                answer_task.choice = task
+                answer_task.save()
+                return redirect('task_app:task-list', pk=kwargs['pk'])
 
-        else:
-            pass
+        if test_question_id:
+            test = get_object_or_404(TestTask, pk=test_question_id)
+            answer_id = request.POST.get('answers')
+            option = get_object_or_404(Option, pk=answer_id)
+            if option.is_correct:
+                ChoiceTest.objects.create(student=self.request.user,
+                                          option_choice=option,
+                                          choice=test)
+
+                return redirect('task_app:task-list', pk=kwargs['pk'])
+
+
+
 
 
 

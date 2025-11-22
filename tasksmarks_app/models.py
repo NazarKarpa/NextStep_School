@@ -48,6 +48,8 @@ class ChoiceTest(models.Model):
     choice = models.ForeignKey(TestTask, on_delete=CASCADE, related_name='choice_test', verbose_name='Збереження тесту')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Зробленно в ')
 
+    def __str__(self):
+        return f'student - {self.student}, Task - {self.choice.name}, answer - {self.option_choice}'
 
 class AnswerTask(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_task', verbose_name='Вибір студента')

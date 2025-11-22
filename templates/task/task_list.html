@@ -11,12 +11,12 @@
 
     {% for test in test_task %}
       <li class="nav-item" role="presentation">
-        <button class="nav-link "
+        <button class="nav-link"
                 id="test_task-tab-{{ test.id }}"
                 data-bs-toggle="tab"
                 data-bs-target="#testtask-tab-pane-{{ test.id }}"
                 type="button" role="tab">
-            {{ forloop.counter }}
+            {{ forloop.counter|add:tasks.count }}
         </button>
       </li>
     {% endfor %}
@@ -37,23 +37,49 @@
 
     {% endfor %}
 
+
     {% for test in test_task %}
-        {% for option in test.answers.all %}
+        <div class="tab-pane fade" id="testtask-tab-pane-{{ test.id }}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+            {% if not user_answer %}
+            <form method="POST">
+                {% csrf_token %}
+            <h3>{{ test.name }}</h3>
+            <input type="hidden" name="test_question_id" value="{{ test.id }}" required>
+           <div data-bs-toggle="buttons">
+               <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3">
+                {% for option in test.answers.all %}
+                   <div class="col">
 
-            <div class="list-group">
-              <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                The current link item
-              </a>
-              <a href="#" class="list-group-item list-group-item-action">{{option.name}}</a>
+                    <input type="radio" class="btn-check" name="answers" id="option-{{ option.id }}" autocomplete="off" value="{{ option.id }}">
+                    <label class="btn btn-primary d-block p-4" for="option-{{ option.id }}">{{ option.name }}</label>
+
+                    </div>
+
+
+                {% endfor %}
+
+               </div>
+               <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
+
             </div>
-
-        {% endfor %}
+            </form>
+            {% else %}
+                {% if user_answer.option_choice == option %}
+                {% if user_answer.option_choice.option == True %}
+                    {% for option in test.answers.all %}
+                   <div class="col">
+                    <label class="btn btn-success d-block p-4" for="option-{{ option.id }}">{{ option.name }}</label>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+        </div>
+        {% endif %}
+        {% endif %}
     {% endfor %}
 
 
+
 </div>
-
-
 
 
 {% endblock %}
