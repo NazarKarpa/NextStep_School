@@ -51,12 +51,12 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
             test = get_object_or_404(TestTask, pk=test_question_id)
             answer_id = request.POST.get('answers')
             option = get_object_or_404(Option, pk=answer_id)
-            if option.is_correct:
-                ChoiceTest.objects.create(student=self.request.user,
-                                          option_choice=option,
-                                          choice=test)
 
-                return redirect('task_app:task-list', pk=kwargs['pk'])
+            ChoiceTest.objects.create(student=self.request.user,
+                                      option_choice=option,
+                                      choice=test)
+
+            return redirect('task_app:task-list', pk=kwargs['pk'])
 
 
 
