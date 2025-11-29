@@ -22,12 +22,12 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
-        test_tast = get_object_or_404(TestTask, pk=self.kwargs.get('pk'))
+        test_task = get_object_or_404(TestTask, pk=self.kwargs.get('pk'))
         context['lesson'] = lesson
         context['tasks'] = context['lesson'].tasks.all()
         context['test_task'] = context['lesson'].tasks_test.all()
         context['answer_task_form'] = AnswerTaskForm()
-        answer = ChoiceTest.objects.filter(choice=test_tast, student=self.request.user).first()
+        answer = ChoiceTest.objects.filter(choice=test_task, student=self.request.user).first()
         if answer:
             context['user_answer'] = answer
         return context
