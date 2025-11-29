@@ -4,11 +4,18 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, View, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+
 from .mixins import *
 import tasksmarks_app.models
 from lessons_app.models import Lesson
 from tasksmarks_app.forms import *
 from django.shortcuts import get_object_or_404
+
+from .serializers import ChoiceTestSerializer
+
 
 class LessonTaskListView(ListView, LoginRequiredMixin):
     model = Task
@@ -57,6 +64,23 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
                                       choice=test)
 
             return redirect('task_app:task-list', pk=kwargs['pk'])
+
+
+@api_view
+def check_answer(request, choice_id):
+
+    choice_test = get_object_or_404(ChoiceTest, id=choice_id)
+    student = request.user
+    if student in choice_test.student.all():
+        answer = True
+
+    else:
+        answer = False
+
+    return Response({
+        'answer': answer
+    })
+
 
 
 

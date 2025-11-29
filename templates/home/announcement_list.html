@@ -5,7 +5,9 @@
 <div class='room-list'>
     {% for announcement in announcements %}
         <div class="card" style="width: 18rem;">
-            <img src="{{ announcement.image.url }}" class="card-img-top">
+            {{ if announcement.image }}
+                <img src="{{ announcement.image.url }}" class="card-img-top">
+            {{ endif }}
             <div class="card-body">
                 <h5 class="card-title"> {{ announcement.title }}</h5>
                 <p class="card-text">description: {{ announcement.content }}</p>
