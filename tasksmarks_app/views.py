@@ -66,23 +66,20 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
             return redirect('task_app:task-list', pk=kwargs['pk'])
 
 
-@api_view
-def check_answer(request, choice_id):
+@api_view(['POST'])
+def check_test(request, test_id):
+    option_choice_id = request.data.get('option_choice_id')
+    option = Option.objects.get(id=option_choice_id)
 
-    choice_test = get_object_or_404(ChoiceTest, id=choice_id)
-    student = request.user
-    if student in choice_test.student.all():
-        answer = True
+    is_correct = option.is_correct
 
-    else:
-        answer = False
+    ChoiceTest.objects.create(
+        student=request.user,
+        option_choice=option,
+        choice_id=test_id
+    )
 
-    return Response({
-        'answer': answer
-    })
-
-
-
+    return Response({'is_correct': is_correct})
 
 
 
