@@ -29,16 +29,24 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
-        test_task = get_object_or_404(TestTask, pk=self.kwargs.get('pk'))
         context['lesson'] = lesson
+        all_tests = context['lesson'].tasks_test.all()
         context['tasks'] = context['lesson'].tasks.all()
         context['test_task'] = context['lesson'].tasks_test.all()
         context['answer_task_form'] = AnswerTaskForm()
-        answer = ChoiceTest.objects.filter(choice=test_task, student=self.request.user).first()
-        if answer:
-            context['user_answer'] = answer
-        return context
+        all_answers = ChoiceTest.objects.filter(choice__in=all_tests, student=self.request.user)
 
+
+        answers_dict = {}
+        for answer in all_answers:
+            test_id = answer.choice_id
+            if test_id not in answers_dict:
+                answers_dict[test_id] = answer
+
+        for test in all_tests:
+            test.user_answer = answers_dict.get(test.id)
+
+        return context
 
     def post(self, request, *args, **kwargs):
         task_id = request.POST.get('task_id')
@@ -54,7 +62,7 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
                 answer_task.save()
                 return redirect('task_app:task-list', pk=kwargs['pk'])
 
-        if test_question_id:
+        elif test_question_id:
             test = get_object_or_404(TestTask, pk=test_question_id)
             answer_id = request.POST.get('answers')
             option = get_object_or_404(Option, pk=answer_id)
@@ -69,10 +77,16 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
 @api_view(['POST'])
 def check_test(request, test_id):
     option_choice_id = request.data.get('option_choice_id')
-    option = Option.objects.get(id=option_choice_id)
+
+    if not option_choice_id:
+        return Response({'error': 'Вибір не вказаний'}, status=400)
+
+    option = get_object_or_404(Option,
+                               id=option_choice_id,
+                               option_id=test_id
+                               )
 
     is_correct = option.is_correct
-
     ChoiceTest.objects.create(
         student=request.user,
         option_choice=option,

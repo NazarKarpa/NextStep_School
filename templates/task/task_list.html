@@ -6,91 +6,189 @@
       <li class="nav-item" role="presentation">
         <button class="nav-link {%if forloop.counter == 1 %}active{% endif %}" id="task-tab-{{ task.id }}" data-bs-toggle="tab" data-bs-target="#task-tab-pane-{{ task.id }}" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">{{forloop.counter}}</button>
       </li>
-
     {% endfor %}
 
     {% for test in test_task %}
       <li class="nav-item" role="presentation">
-        <button class="nav-link"
-                id="test_task-tab-{{ test.id }}"
-                data-bs-toggle="tab"
-                data-bs-target="#testtask-tab-pane-{{ test.id }}"
-                type="button" role="tab">
+        <button class="nav-link" id="test_task-tab-{{ test.id }}" data-bs-toggle="tab" data-bs-target="#testtask-tab-pane-{{ test.id }}" type="button" role="tab">
             {{ forloop.counter|add:tasks.count }}
         </button>
       </li>
     {% endfor %}
-
 </ul>
+
 <div class="tab-content" id="myTabContent">
     {% for task in tasks %}
-        <div class="tab-pane fade {%if forloop.counter == 1 %} show active{% endif %}" id="task-tab-pane-{{ task.id }}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <div class="tab-pane fade {%if forloop.counter == 1 %} show active{% endif %}" id="task-tab-pane-{{ task.id }}" role="tabpanel" tabindex="0">
             {{task.description}}
-
-        <form action="{% url 'task_app:task-list' lesson.pk %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" name="task_id" value="{{task.id}}">
-            {{ answer_task_form.as_p }}
-            <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
-        </form>
+            <form action="{% url 'task_app:task-list' lesson.pk %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="task_id" value="{{task.id}}">
+                {{ answer_task_form.as_p }}
+                <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
+            </form>
         </div>
-
     {% endfor %}
-
 
     {% for test in test_task %}
-        <div class="tab-pane fade" id="testtask-tab-pane-{{ test.id }}" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-            {% if not user_answer %}
-            <form method="POST">
-                {% csrf_token %}
-            <h3>{{ test.name }}</h3>
-            <input type="hidden" name="test_question_id" value="{{ test.id }}" required>
-           <div data-bs-toggle="buttons">
-               <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3">
-                {% for option in test.answers.all %}
-
-                   <div class="col">
-
-                    <input type="radio" class="btn-check" name="answers" id="option-{{ option.id }}" autocomplete="off" value="{{ option.id }}">
-                    <label class="btn btn-primary d-block p-4" for="option-{{ option.id }}">{{ option.name }}</label>
-
-                    </div>
-
-                {% endfor %}
-
-               </div>
-               <button type="submit" class="btn btn-outline-primary"><i class="bi bi-send"></i></button>
-            {% else %}
+        <div class="tab-pane fade" id="testtask-tab-pane-{{ test.id }}" role="tabpanel" tabindex="0">
+            {% if not test.user_answer %}
+                <form class="test-form" data-test-id="{{ test.id }}">
+                    {% csrf_token %}
+                    <h3>{{ test.name }}</h3>
                     <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3">
-                            {% for option in test.answers.all %}
-                                {% if user_answer.option_choice == option %}
-                                    {% if option.is_correct == True %}
-                                       <div class="col">
-                                        <label class="btn btn-success d-block p-4" for="option-{{ option.id }}">{{ option.name }}</label>
-                                           <h3>Молодець!!!!</h3>
-                                        </div>
-
-                                    {% else %}
-                                        <div class="col">
-                                        <label class="btn btn-danger d-block p-4" for="option-{{ option.id }}">{{ option.name }}</label>
-                                            <h3>Думай іше</h3>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-
+                        {% for option in test.answers.all %}
+                            <div class="col">
+                                <input type="radio" class="btn-check" name="answers" id="option-{{ test.id }}-{{ option.id }}" value="{{ option.id }}">
+                                <label class="btn btn-primary d-block p-4" for="option-{{ test.id }}-{{ option.id }}">{{ option.name }}</label>
+                            </div>
+                        {% endfor %}
                     </div>
+                    <button type="submit" class="btn btn-outline-primary mt-3"><i class="bi bi-send"></i></button>
+                    {% else %}
+                    {% for option in test.answers.all %}
+                        {% if test.user_answer.option_choice == option %}
+                            <div class="col">
+                                <label class="btn {% if option.is_correct %}btn-success{% else %}btn-danger{% endif %} d-block p-4">
+                                    {{ option.name }}
+                                </label>
+                                <h3 class="mt-2">{% if option.is_correct %}Молодець!{% else %}Думай ще{% endif %}</h3>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </form>
 
-            </div>
-            </form>
+                <div class="row row-cols-1 row-cols-md-2 g-2 g-lg-3">
 
-
-        {% endif %}
+                </div>
+            {% endif %}
+        </div>
     {% endfor %}
-
-
-
 </div>
 
+<script>
+document.querySelectorAll('.test-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const testId = form.dataset.testId;
+        const selected = form.querySelector('input[name="answers"]:checked');
+
+        if (!selected) {
+            alert('Оберіть варіант');
+            return;
+        }
+
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const radioButtons = form.querySelectorAll('input[type="radio"]');
+        const labels = form.querySelectorAll('.btn');
+
+        // Блокуємо все під час запиту
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass"></i> Перевірка...';
+        radioButtons.forEach(radio => radio.disabled = true);
+
+        try {
+            const response = await fetch(`/api/check-test/${testId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ option_choice_id: selected.value })
+            });
+
+            const result = await response.json();
+
+            // Скидаємо всі кольори
+            labels.forEach(label => {
+                label.classList.remove('btn-success', 'btn-danger', 'btn-primary');
+                label.classList.add('btn-secondary');
+            });
+
+            if (result.is_correct) {
+                // Робимо обрану кнопку зеленою
+                selected.nextElementSibling.classList.remove('btn-secondary');
+                selected.nextElementSibling.classList.add('btn-success');
+
+                // Додаємо повідомлення
+                let messageDiv = form.querySelector('.result-message');
+                if (!messageDiv) {
+                    messageDiv = document.createElement('div');
+                    messageDiv.className = 'result-message';
+                    form.appendChild(messageDiv);
+                }
+                messageDiv.innerHTML = `
+                    <div class="alert alert-success mt-3">
+                        <i class="bi bi-check-circle"></i> Правильно! Молодець!
+                    </div>
+                `;
+
+            } else {
+                // Робимо обрану кнопку червоною
+                selected.nextElementSibling.classList.remove('btn-secondary');
+                selected.nextElementSibling.classList.add('btn-danger');
+
+                // Додаємо повідомлення
+                let messageDiv = form.querySelector('.result-message');
+                if (!messageDiv) {
+                    messageDiv = document.createElement('div');
+                    messageDiv.className = 'result-message';
+                    form.appendChild(messageDiv);
+                }
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger mt-3">
+                        <i class="bi bi-x-circle"></i> Неправильно! Спробуйте ще.
+                    </div>
+                `;
+            }
+
+            // Додаємо кнопку "Спробувати ще раз"
+            let retryBtn = form.querySelector('.retry-button');
+            if (!retryBtn) {
+                retryBtn = document.createElement('button');
+                retryBtn.type = 'button';
+                retryBtn.className = 'btn btn-outline-warning mt-3 retry-button';
+                retryBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Спробувати ще раз';
+                form.appendChild(retryBtn);
+
+                retryBtn.addEventListener('click', () => {
+                    // Скидаємо все
+                    labels.forEach(label => {
+                        label.classList.remove('btn-success', 'btn-danger', 'btn-secondary');
+                        label.classList.add('btn-primary');
+                    });
+
+                    radioButtons.forEach(radio => {
+                        radio.disabled = false;
+                        radio.checked = false;
+                    });
+
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="bi bi-send"></i> Відправити';
+
+                    // Видаляємо повідомлення та кнопку повтору
+                    const messageDiv = form.querySelector('.result-message');
+                    if (messageDiv) messageDiv.remove();
+                    retryBtn.remove();
+                });
+            }
+
+        } catch (error) {
+            console.error('Помилка:', error);
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'alert alert-warning mt-3';
+            errorMsg.innerHTML = 'Помилка сервера. Спробуйте ще раз.';
+            form.appendChild(errorMsg);
+
+            // Розблоковуємо форму
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bi bi-send"></i> Відправити';
+            radioButtons.forEach(radio => radio.disabled = false);
+        }
+    });
+});
+</script>
 
 {% endblock %}
