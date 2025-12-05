@@ -32,8 +32,15 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
         context['lesson'] = lesson
         context['tasks'] = context['lesson'].tasks.all()
         context['answer_task_form'] = AnswerTaskForm()
-        
-        # Отримуємо всі тести для цього уроку
+
+        for task in context['tasks']:
+            task.user_answer = AnswerTask.objects.filter(
+                student=self.request.user,
+                choice=task
+            ).first()
+
+
+
         all_tests = list(lesson.tasks_test.all())
         
         # Отримуємо всі відповіді користувача для цих тестів
