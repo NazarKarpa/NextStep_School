@@ -30,21 +30,30 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         lesson = get_object_or_404(Lesson, pk=self.kwargs.get('pk'))
         context['lesson'] = lesson
-        all_tests = context['lesson'].tasks_test.all()
         context['tasks'] = context['lesson'].tasks.all()
-        context['test_task'] = context['lesson'].tasks_test.all()
         context['answer_task_form'] = AnswerTaskForm()
-        all_answers = ChoiceTest.objects.filter(choice__in=all_tests, student=self.request.user)
+        
+        # Отримуємо всі тести для цього уроку
+        all_tests = list(lesson.tasks_test.all())
+        
+        # Отримуємо всі відповіді користувача для цих тестів
+        all_answers = ChoiceTest.objects.filter(
+            choice__in=all_tests, 
+            student=self.request.user
+        )
 
-
+        # Створюємо словник для швидкого доступу
         answers_dict = {}
         for answer in all_answers:
             test_id = answer.choice_id
             if test_id not in answers_dict:
                 answers_dict[test_id] = answer
 
+        # Додаємо user_answer до кожного тесту
         for test in all_tests:
             test.user_answer = answers_dict.get(test.id)
+        
+        context['test_task'] = all_tests
 
         return context
 
@@ -76,6 +85,20 @@ class LessonTaskListView(ListView, LoginRequiredMixin):
 
 @api_view(['POST'])
 def check_test(request, test_id):
+    # Перевірка чи користувач вже відповідав на цей тест
+    existing_answer = ChoiceTest.objects.filter(
+        student=request.user,
+        choice_id=test_id
+    ).first()
+
+    if existing_answer:
+        return Response({
+            'error': 'Ви вже відповіли на цей тест',
+            'already_answered': True,
+            'is_correct': existing_answer.option_choice.is_correct,
+            'selected_option_id': existing_answer.option_choice.id
+        }, status=400)
+
     option_choice_id = request.data.get('option_choice_id')
 
     if not option_choice_id:
@@ -93,7 +116,10 @@ def check_test(request, test_id):
         choice_id=test_id
     )
 
-    return Response({'is_correct': is_correct})
+    return Response({
+        'is_correct': is_correct,
+        'selected_option_id': option.id
+    })
 
 
 
