@@ -7,6 +7,7 @@ from tasksmarks_app.mixins import *
 from lessons_app.models import Lesson, LessonSchedule, Material
 
 
+
 class LessonsListView(LoginRequiredMixin, ListView):
     module = Lesson
     context_object_name = 'lessons'
