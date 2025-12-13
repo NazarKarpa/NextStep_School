@@ -34,6 +34,7 @@ class LessonsDetailView(LoginRequiredMixin, DetailView, TaskDetailMixins):
 
 
 class MaterialDetail(LoginRequiredMixin, DetailView):
+
     model = Material
     context_object_name = 'material'
     template_name = 'lessons/material_detail.html'
