@@ -6,14 +6,13 @@ from django.db.models import CASCADE
 
 class Task(models.Model):
     STATUS_CHOICES = [
-        ('todo', 'To Do'),
         ('un_check', 'Un check'),
         ('well', 'Well Done!'),
         ('wrong', 'Wrong, try again')
     ]
     name = models.CharField(max_length=150)
     description = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='todo')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='un_check')
 
 
     def __str__(self):

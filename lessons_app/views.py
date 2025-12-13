@@ -11,18 +11,19 @@ from lessons_app.models import Lesson, LessonSchedule, Material
 
 
 class LessonsListView(LoginRequiredMixin, ListView):
-    modul = Lesson
+    model = Lesson
     context_object_name = 'lessons'
     template_name = 'lessons/lesson_list.html'
 
     def get_queryset(self):
-        queryset = Lesson.objects.all()
+        module = get_object_or_404(Module, pk=self.kwargs.get('module_id'))
+        lessons = Lesson.objects.filter(modul=module)
 
-        return queryset
+        return lessons
 
 
 class LessonsDetailView(LoginRequiredMixin, DetailView, TaskDetailMixins):
-    modul = Lesson
+    model = Lesson
     context_object_name = 'lesson'
     template_name = 'lessons/lesson_detail.html'
 
@@ -33,7 +34,8 @@ class LessonsDetailView(LoginRequiredMixin, DetailView, TaskDetailMixins):
 
 
 class MaterialDetail(LoginRequiredMixin, DetailView):
-    modul = Material
+
+    model = Material
     context_object_name = 'material'
     template_name = 'lessons/material_detail.html'
 

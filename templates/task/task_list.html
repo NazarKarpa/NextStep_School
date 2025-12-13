@@ -28,8 +28,10 @@
             <div class="alert alert-info mt-3">
                 <h5>Ваша відповідь:</h5>
                 <p>{{ task.user_answer.answer }}</p>
-                <div class="mt-2">
-                <span class="badge bg-warning text-dark">{{ task.status }}</span>
+
+
+                <p>Статус: <span class="badge text-bg-primary">{{ task.status }}</span></p>
+
             </div>
         {% else %}
             <form action="{% url 'task_app:task-list' lesson.pk %}" method="post">
