@@ -29,7 +29,7 @@
                 <h5>Ваша відповідь:</h5>
                 <p>{{ task.user_answer.answer }}</p>
 
-                <span class="badge bg-warning text-dark">{{ task.status }}</span>
+                <p>Статус: <span class="badge text-bg-primary">{{ task.status }}</span></p>
             </div>
         {% else %}
             <form action="{% url 'task_app:task-list' lesson.pk %}" method="post">
