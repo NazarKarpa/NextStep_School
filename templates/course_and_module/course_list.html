@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
-<ul>
-    {% for course in courses %}
-        <li>
-            <a href="{% url 'course_and_module_app:course-detail' course.pk %}">{{ course.name }}</a>
-        </li>
-    {% endfor %}
+
+<ul class="list-group">
+  {% for course in courses %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <a href="{% url 'course_and_module_app:course-detail' course.pk %}"
+         class="text-decoration-none text-body me-3 flex-grow-1">
+        <div class="fw-bold">{{ course.title }}</div>
+        <div class="text-muted">{{ course.description }}</div>
+      </a>
+
+      <a href="{% url 'course_and_module_app:course-detail' course.pk %}"
+         class="btn btn-primary btn-sm flex-shrink-0 px-4">
+        Деталі
+      </a>
+    </li>
+  {% endfor %}
 </ul>
 
 

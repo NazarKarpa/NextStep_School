@@ -1,24 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<ul>
-<div class='room-list'>
+<div class='row'>
     {% for announcement in announcements %}
-        <div class="card" style="width: 18rem;">
-            {% if announcement.image %}
-                <img src="{{ announcement.image.url }}" class="card-img-top">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title"> {{ announcement.title }}</h5>
-                <p class="card-text">description: {{ announcement.content }}</p>
-
-
-
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                {% if announcement.image %}
+                    <img src="{{ announcement.image.url }}" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ announcement.title }}</h5>
+                    <p class="card-text">description: {{ announcement.content }}</p>
+                </div>
             </div>
         </div>
     {% endfor %}
 </div>
-
-</ul>
 
 {% endblock %}
