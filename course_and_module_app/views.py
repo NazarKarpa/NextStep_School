@@ -14,13 +14,13 @@ class CourseListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Course.objects.filter(students = self.request.user).all()
-
         return queryset
 
 class CourseDetailView(LoginRequiredMixin, DetailView):
     model = Course
     context_object_name = 'course'
     template_name = 'course_and_module/course_page.html'
+
 
     # def get_queryset(self):
     #     queryset = ModuleSchedule.objects.filter().all()
